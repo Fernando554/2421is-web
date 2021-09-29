@@ -1,3 +1,5 @@
+let BI = 0, RDR = 0, HMCC = 0, GOW = 0; 
+
 window.onload = function(){
 
     let baseDeDatos = [
@@ -10,7 +12,7 @@ window.onload = function(){
         {
             id: 2,
             nombre: 'Read Dead Redemption II',
-            precio: 1500.00,
+            precio: 1900.00,
             imagen: 'img/RDR2.jpg'
         },
         {
@@ -52,7 +54,7 @@ window.onload = function(){
 
             let miNodoPrecio = document.createElement('p');
             miNodoPrecio.classList.add('card-text');
-            miNodoPrecio.textContent = info['precio'] + '$';
+            miNodoPrecio.textContent = '$' + info['precio'];
 
             let miNodoBoton = document.createElement('button');
             miNodoBoton.classList.add('btn', 'btn-primary');
@@ -71,6 +73,19 @@ window.onload = function(){
 
     function aniadirCarrito(){
         carrito.push(this.getAttribute('marcador'))
+        var marca = this.getAttribute('marcador');
+        if(marca == 1){
+            BI = BI + 350;
+        }
+        else if(marca == 2){
+            RDR = RDR + 1900;
+        }
+        else if(marca == 3){
+            HMCC = HMCC + 1500;
+        }
+        else if(marca == 4){
+            GOW = GOW + 500;
+        }
         calcularTotal();
         renderizarCarrito();
     }
@@ -91,7 +106,7 @@ window.onload = function(){
 
             let miNodo = document.createElement('li');
             miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
-            miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0]['nombre']} - ${miItem[0]['precio']}$`;
+            miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0]['nombre']} -> $${miItem[0]['precio']}`;
 
             let miBoton = document.createElement('button');
             miBoton.classList.add('btn', 'btn-danger', 'mx-5');
@@ -113,6 +128,20 @@ window.onload = function(){
             return carritoId !== id;
         });
 
+        var item = this.getAttribute('item');
+        if(item == 1){
+            BI = 0;
+        }
+        else if(item == 2){
+            RDR = 0;
+        }
+        else if(item == 3){
+            HMCC = 0;
+        }
+        else if(item == 4){
+            GOW = 0;
+        }
+
         renderizarCarrito();
         calcularTotal();
     }
@@ -129,7 +158,39 @@ window.onload = function(){
 
         let totalDosDecimales = total.toFixed(2);
         $total.textContent = totalDosDecimales;
+
     }
 
     renderItems();
 }
+
+    let Graficas = document.getElementById("Grafica");
+        
+    var chart = new Chart(Graficas,{
+        type:"bar",
+        data:{
+            labels:["Bioshock Infinite (X360)","Red Dead Redemption II", "Halo Master Chief Collection", "God of War"],
+            datasets:[
+                {
+                    label:"Gráfica de Productos",
+                }
+            ]
+        }
+    })
+
+    $(".graficar").click(function(){
+        chart.destroy();
+
+        chart = new Chart(Graficas,{
+            type:"bar",
+            data:{
+                labels:["Bioshock Infinite (X360)","Red Dead Redemption II", "Halo Master Chief Collection", "God of War"],
+                datasets:[
+                    {
+                        label:"Gráfica de Productos",
+                        data:[BI, RDR, HMCC, GOW]
+                    }
+                ]
+            }
+        })
+    });
